@@ -2,7 +2,7 @@
   <div class="nav-page">
     <el-row class="container">
       <el-col :span="18" class="ling-group">
-        <a href="#">首页</a>
+        <router-link to="/">首页</router-link>
         <a href="#">手机</a>
         <a href="#">官方配件</a>
         <a href="#">服饰箱包</a>

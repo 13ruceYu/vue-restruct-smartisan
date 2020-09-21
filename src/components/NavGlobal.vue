@@ -5,7 +5,7 @@
         <router-link to="/">锤</router-link>
       </el-col>
       <el-col :span="16" class="link-group text-center">
-        <a href="#">在线商城</a>
+        <router-link to="/">在线商城</router-link>
         <a href="#">坚果Pro3</a>
         <a href="#">坚果Pro2S</a>
         <a href="#">坚果TNT工作站</a>
