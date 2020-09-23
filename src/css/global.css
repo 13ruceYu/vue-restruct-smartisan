@@ -3,7 +3,8 @@
 }
 
 :root {
-  font-family: "PingFang SC", "Microsoft YaHei UI", system-ui, -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, sans-serif;
+  font-family: "PingFang SC", "Microsoft YaHei UI", system-ui, -apple-system,
+    BlinkMacSystemFont, Helvetica Neue, Helvetica, sans-serif;
   font-size: 16px;
   color: #333333;
 }
@@ -57,7 +58,7 @@ a {
 
 .container {
   max-width: 1220px;
-  padding: 0 .5em;
+  padding: 0 0.5em;
 }
 
 .container-form {
@@ -74,19 +75,24 @@ a {
 }
 
 .cny:before {
-  content: '￥';
+  content: "￥";
 }
 
 .pair {
-  margin: .2em 0;
+  margin: 0.2em 0;
 }
 
-.pair>* {
+.pair > * {
   display: inline-block;
   margin: 0 1em 0 0;
   vertical-align: top;
 }
 
-.pair>*:nth-child(odd) {
-  opacity: .6;
+.pair > *:nth-child(odd) {
+  opacity: 0.6;
+}
+
+.anchor:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }

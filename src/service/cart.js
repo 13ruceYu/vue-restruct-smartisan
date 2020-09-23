@@ -11,16 +11,14 @@ const output = {
       return;
     }
     callbackPool.push(fn);
-    this.callPool();
+    // this.callPool();
   },
 
   change(product_id, count, product) {
     if (!localCart[product_id]) {
-      localCart[product_id] = { count, product };
-      console.log(callbackPool);
-    } else {
-      localCart[product_id].count += count;
+      localCart[product_id] = { count: 0, product };
     }
+    localCart[product_id].count += count;
     this.sync();
     this.callPool();
   },
@@ -29,6 +27,8 @@ const output = {
   },
   clear(product_id) {
     delete localCart[product_id];
+    this.sync();
+    this.callPool();
   },
   get() {
     return localCart;

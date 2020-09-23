@@ -16,11 +16,14 @@ import Product from "./pages/Product";
 import PasswordRecover from "./pages/PasswordRecover";
 import My from "./pages/my/My";
 import MyOrder from "./pages/my/MyOrder";
+import MyCart from "./pages/my/MyCart";
+import MySetting from "./pages/my/MySetting";
 import Admin from "./pages/admin/Admin";
 import AdminUser from "./pages/admin/AdminUser";
 import AdminBrand from "./pages/admin/AdminBrand";
 import AdminCat from "./pages/admin/AdminCat";
 import AdminProduct from "./pages/admin/AdminProduct";
+import store from './store'
 
 
 const router = new VueRouter({
@@ -52,7 +55,15 @@ const router = new VueRouter({
         {
           path:'order/:id?',
           component: MyOrder
-        }
+        },
+        {
+          path:'cart',
+          component: MyCart
+        },
+        {
+          path:'setting',
+          component: MySetting
+        },
       ]
     },
     {
@@ -96,5 +107,6 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
-  render: h => h(App),
+  store,
+  render: h => h(App)
 }).$mount('#app')

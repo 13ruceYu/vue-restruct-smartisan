@@ -14,13 +14,26 @@
       </el-col>
       <el-col :span="4" class="text-right auth">
         <span v-if="user">
-          <router-link :to="user.IS_ADMIN ? '/admin' : '/me'">{{user.nickname || user.mail}}</router-link>
+          <router-link :to="user.IS_ADMIN ? '/admin' : '/my'">{{
+            user.nickname || user.mail
+          }}</router-link>
+          <i
+            class="el-icon-shopping-bag-1 cart-icon anchor"
+            @click="cartVisible = !cartVisible"
+          ></i>
           <a href="#" @click="session.logout()">登出</a>
         </span>
         <span v-else>
           <router-link to="/login">登录/注册</router-link>
         </span>
-        <Cart></Cart>
+        <Cart
+          @close="
+            () => {
+              cartVisible = false;
+            }
+          "
+          v-if="cartVisible"
+        ></Cart>
       </el-col>
     </el-row>
   </nav>
@@ -29,16 +42,17 @@
 import session from "../lib/session";
 import Cart from "./Cart";
 export default {
-  components: {Cart},
+  components: { Cart },
   mounted() {
     this.user = session.user();
   },
   data() {
     return {
       user: {},
-      session
+      session,
+      cartVisible: false,
     };
-  }
+  },
 };
 </script>
 <style>
@@ -60,6 +74,12 @@ nav .link-group a {
 }
 
 nav .auth a {
-  margin-right: .5em;
+  margin-right: 0.5em;
+}
+
+nav .cart-icon {
+  font-size: 1.2em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 </style>

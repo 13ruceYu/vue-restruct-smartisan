@@ -24,7 +24,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 .admin {
   margin-bottom: 1em;
 }
