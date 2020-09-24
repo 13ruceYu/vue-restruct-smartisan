@@ -11,12 +11,11 @@ const output = {
       return;
     }
     callbackPool.push(fn);
-    // this.callPool();
   },
 
-  change(product_id, count, product) {
+  change(product_id, count, product_snapshot, prop) {
     if (!localCart[product_id]) {
-      localCart[product_id] = { count: 0, product };
+      localCart[product_id] = { product_id, count: 0, product_snapshot, prop };
     }
     localCart[product_id].count += count;
     this.sync();

@@ -31,7 +31,7 @@
             >
               <span class="spec-title">{{ name }}</span>
               <span
-                :class="index === 0 ? 'active' : ''"
+                :class="form.prop[name] === prop ? 'active' : ''"
                 @click="setProp(name, prop)"
                 v-for="(prop, index) in item"
                 :key="index"
@@ -52,9 +52,7 @@
               <el-button type="primary" @click="createOrder"
                 >现在购买</el-button
               >
-              <el-button @click="cartService.change(row.id, form.count, row)"
-                >加入购物车</el-button
-              >
+              <el-button @click="addToCart">加入购物车</el-button>
             </section>
           </el-col>
         </el-row>
@@ -76,7 +74,8 @@
 <script>
 import api from "../lib/api";
 import session from "../lib/session";
-import { fileUrl, orderSum } from "../lib/helper";
+import { fileUrl } from "../lib/helper";
+import { createOrder } from "../lib/order";
 import cartService from "../service/cart";
 export default {
   mounted() {
@@ -88,7 +87,8 @@ export default {
       cartService,
       row: {}, // 从后端拿到的当前页数据
       currentCover: "",
-      form: { // 用户造作表单数据
+      form: {
+        // 用户操作表单数据
         count: 1,
         prop: {},
       },
@@ -101,7 +101,6 @@ export default {
         this.row = r.data;
         this.normalize();
         // 设置默认购买选项如尺码和颜色
-
       });
     },
     normalize() {
@@ -114,8 +113,8 @@ export default {
       this.row.prop = betterProp;
       this.currentCover = fileUrl(this.row.main_img[0]);
       // 设定默认选择
-      for(let key in this.row.prop) {
-        this.setProp(key, this.row.prop[key][0])
+      for (let key in this.row.prop) {
+        this.setProp(key, this.row.prop[key][0]);
       }
     },
     mainCoverChange(index) {
@@ -123,6 +122,14 @@ export default {
     },
     setProp(name, prop) {
       this.$set(this.form.prop, name, prop);
+    },
+    addToCart() {
+      this.cartService.change(
+        this.row.id,
+        this.form.count,
+        this.row,
+        this.form.prop
+      );
     },
     createOrder() {
       // 草，下次用这种简写能不能注释啊傻逼
@@ -132,27 +139,32 @@ export default {
       f.product_id = p.id;
       f.product_snapshot = p;
 
-      let order = { product_list: [f] };
-      order.sum = orderSum(order.product_list);
+      // let order = { product_list: [f] };
+      // order.sum = orderSum(order.product_list);
+      // order.user_id = session.user().id;
 
       if (!session.user().id) {
         this.$notify.info({
-          title: 'Info',
-          message: '尚未登录，请登录后购买'
+          title: "Info",
+          message: "尚未登录，请登录后购买",
         });
         return;
       }
-      order.user_id = session.user().id;
 
       if (!this.form.count && this.form.count < 1) {
         this.$notify.info({
-          title: 'Info',
-          message: '请选择数量'
+          title: "Info",
+          message: "请选择数量",
         });
         return;
       }
 
-      api("order/create", order).then((r) => {
+      // api("order/create", order).then((r) => {
+      //   if (r.success) {
+      //     this.$router.push(`/my/order/${r.data.id}`);
+      //   }
+      // });
+      createOrder([f], session.user("id").id).then((r) => {
         if (r.success) {
           this.$router.push(`/my/order/${r.data.id}`);
         }

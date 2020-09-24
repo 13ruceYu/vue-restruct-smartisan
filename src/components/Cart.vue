@@ -3,7 +3,10 @@
     <el-card>
       <div slot="header" class="clearfix">
         <span>购物车</span>
-        <el-button @click="$emit('close')" style="float: right; padding: 3px 0; color: #ccc" type="text"
+        <el-button
+          @click="$emit('close')"
+          style="float: right; padding: 3px 0; color: #ccc"
+          type="text"
           >关闭</el-button
         >
       </div>
@@ -14,42 +17,58 @@
           class="list-item"
         >
           <el-col :span="6" class="product-thumb">
-            <img :src="fileUrl(item.product.main_img[0])" alt="cart-thumbnail">
+            <img
+              :src="fileUrl(item.product_snapshot.main_img[0])"
+              alt="cart-thumbnail"
+            />
           </el-col>
           <el-col :span="14" class="product-desc">
             <div class="product-desc-title">
-              <router-link target="_blank" :to="'/product/' + item.product.id" style="line-height: 0">{{item.product.title}}</router-link>
+              <router-link
+                target="_blank"
+                :to="'/product/' + item.product_snapshot.id"
+                style="line-height: 0"
+                >{{ item.product_snapshot.title }}</router-link
+              >
             </div>
             <div class="product-desc-prop">
-              <span v-for="(prop, index) in item.product.prop" :key="index">{{prop[0]}}</span>
+              <span v-for="(prop, index) in item.product_snapshot.prop" :key="index">{{
+                prop[0]
+              }}</span>
             </div>
             <div class="product-desc-price">
               <span class="cny price">
-                {{item.product.price}}
+                {{ item.product_snapshot.price }}
               </span>
-              <span class="count">
-                x {{item.count}}
-              </span>
+              <span class="count"> x {{ item.count }} </span>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="delete-prod" style="float: right; margin-top: 2em">
-              <el-button icon="el-icon-close" circle size="mini" @click="cartService.clear(item.product.id)"></el-button>
+              <el-button
+                icon="el-icon-close"
+                circle
+                size="mini"
+                @click="cartService.clear(item.product_snapshot.id)"
+              ></el-button>
             </div>
           </el-col>
         </el-row>
         <div class="cart-total" style="margin-top: 1.5em">
           <div class="total-price">
-            <el-button type="primary" style="float: right"><router-link to="/my/cart" style="line-height: 0; margin-right: 0">去购物车</router-link></el-button>
-            <div class="product-count">
-              共件 {{productSum}} 商品
-            </div>
+            <el-button type="primary" style="float: right"
+              ><router-link
+                to="/my/cart"
+                style="line-height: 0; margin-right: 0"
+                >去购物车</router-link
+              ></el-button
+            >
+            <div class="product-count">共件 {{ productSum }} 商品</div>
             <div class="price-count">
-              合计：<span class="cny">{{priceSum}}</span>
+              合计：<span class="cny">{{ priceSum }}</span>
             </div>
           </div>
-          <div class="settle">
-          </div>
+          <div class="settle"></div>
         </div>
       </div>
     </el-card>
@@ -62,16 +81,26 @@ export default {
   name: "Cart",
   mounted() {
     this.listCart = this.cartService.get();
+    this.productSum = 0;
+    for (let key in this.listCart) {
+      this.productSum += this.listCart[key].count;
+    }
+    for (let key in this.listCart) {
+      let product = this.listCart[key];
+      let priceSum = product.count * product.product_snapshot.price;
+      this.priceSum += priceSum;
+    }
+
     cartService.onChange((localCart) => {
       // 计算购物车总件数和总价
       this.productSum = 0;
-      for(let key in localCart) {
+      for (let key in localCart) {
         this.productSum += localCart[key].count;
       }
       let priceTotal = 0;
-      for(let key in localCart) {
+      for (let key in localCart) {
         let product = localCart[key];
-        let priceSum = product.count * product.product.price;
+        let priceSum = product.count * product.product_snapshot.price;
         priceTotal += priceSum;
       }
       this.priceSum = priceTotal;
@@ -83,7 +112,7 @@ export default {
       listCart: {},
       cartService,
       productSum: 0,
-      priceSum: 0
+      priceSum: 0,
     };
   },
   methods: {
@@ -106,7 +135,7 @@ export default {
 .list-item {
   margin-bottom: 1em;
   border-bottom: 1px solid #eee;
-  padding-bottom: .5em;
+  padding-bottom: 0.5em;
 }
 
 .product-desc {
@@ -118,7 +147,7 @@ export default {
 }
 
 .product-desc-prop {
-  margin: .6em 0;
+  margin: 0.6em 0;
 }
 
 .product-desc-prop span {
@@ -139,8 +168,8 @@ export default {
 
 .cart-total .product-count {
   color: #ccc;
-  font-size: .85em;
-  margin-bottom: .2em;
+  font-size: 0.85em;
+  margin-bottom: 0.2em;
 }
 
 .cart-total .price-count {
@@ -153,5 +182,4 @@ export default {
   color: #c10;
   font-size: 1.2em;
 }
-
 </style>
